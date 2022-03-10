@@ -1,13 +1,15 @@
+/** @format */
+
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getUsers,
   getCreatedUser,
   getUpdatedUser,
-  getDeletedUser
+  getDeletedUser,
 } from "./app/api";
 
-// Styles
+//-- Styles
 import "./app.scss";
 
 // Components
@@ -25,7 +27,7 @@ import MySwal from "./index";
 
 function App() {
   const dispatch = useDispatch();
-  const users = useSelector(state => state.users);
+  const users = useSelector((state) => state.users);
 
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +36,7 @@ function App() {
     avatar: null,
     first_name: "",
     last_name: "",
-    email: ""
+    email: "",
   });
   const [activeModal, setActiveModal] = useState({ name: "", active: false });
   const [savedUsers, setSavedUsers] = useState(users);
@@ -47,23 +49,23 @@ function App() {
   const currentUsers = users.slice(usersFirstIndex, usersLastIndex);
 
   // Setting up Modal
-  const setModal = modal => {
+  const setModal = (modal) => {
     search("");
     setActiveModal({ name: modal, active: true });
   };
 
   // Pagination
-  const paginate = page => {
+  const paginate = (page) => {
     setCurrentPage(page);
   };
 
   // Search
-  const search = term => {
+  const search = (term) => {
     if (term.length > 2) {
       setCurrentPage(1);
 
-      const results = savedUsers.filter(user =>
-        Object.keys(user).some(key =>
+      const results = savedUsers.filter((user) =>
+        Object.keys(user).some((key) =>
           user[key]
             .toString()
             .toLowerCase()
@@ -78,7 +80,7 @@ function App() {
   };
 
   // Sorting
-  const sorting = key => {
+  const sorting = (key) => {
     setSorted(!sorted);
     switch (key) {
       case "name":
@@ -111,16 +113,16 @@ function App() {
   };
 
   // Create User
-  const createUser = async user => {
+  const createUser = async (user) => {
     setActiveModal(false);
     setLoading(true);
 
     try {
-      await getCreatedUser(user).then(res => {
+      await getCreatedUser(user).then((res) => {
         const result = res.data;
         MySwal.fire({
           icon: "success",
-          title: "User created successfully."
+          title: "User created successfully.",
         }).then(() => {
           dispatch({ type: "CREATE_USER", data: result });
           setSavedUsers([...users, result]);
@@ -129,7 +131,7 @@ function App() {
     } catch (err) {
       MySwal.fire({
         icon: "error",
-        title: "Failed to create user."
+        title: "Failed to create user.",
       });
     } finally {
       setLoading(false);
@@ -137,7 +139,7 @@ function App() {
   };
 
   // Update User
-  const updateRow = user => {
+  const updateRow = (user) => {
     setModal("Update User");
 
     setCurrentUser({
@@ -145,7 +147,7 @@ function App() {
       avatar: user.avatar,
       first_name: user.first_name,
       last_name: user.last_name,
-      email: user.email
+      email: user.email,
     });
   };
 
@@ -154,24 +156,24 @@ function App() {
     setLoading(true);
 
     try {
-      await getUpdatedUser(id, updatedUser).then(res => {
+      await getUpdatedUser(id, updatedUser).then((res) => {
         const result = res.data;
         MySwal.fire({
           icon: "success",
-          title: "User updated successfully."
+          title: "User updated successfully.",
         }).then(() => {
           dispatch({
             type: "SET_USERS",
-            data: users.map(user =>
+            data: users.map((user) =>
               user.id === id ? Object.assign(user, result) : user
-            )
+            ),
           });
         });
       });
     } catch (err) {
       MySwal.fire({
         icon: "error",
-        title: "Failed to update user."
+        title: "Failed to update user.",
       });
     } finally {
       setLoading(false);
@@ -179,7 +181,7 @@ function App() {
   };
 
   // Delete User
-  const deleteRow = user => {
+  const deleteRow = (user) => {
     setModal("Delete User");
 
     setCurrentUser({
@@ -187,11 +189,11 @@ function App() {
       avatar: user.avatar,
       first_name: user.first_name,
       last_name: user.last_name,
-      email: user.email
+      email: user.email,
     });
   };
 
-  const deleteUser = async id => {
+  const deleteUser = async (id) => {
     setActiveModal(false);
     setLoading(true);
 
@@ -199,20 +201,20 @@ function App() {
       await getDeletedUser(id).then(() => {
         MySwal.fire({
           icon: "success",
-          title: "User deleted successfully."
+          title: "User deleted successfully.",
         }).then(() => {
           dispatch({
             type: "SET_USERS",
-            data: users.filter(user => user.id !== id)
+            data: users.filter((user) => user.id !== id),
           });
-          setSavedUsers(savedUsers.filter(user => user.id !== id));
+          setSavedUsers(savedUsers.filter((user) => user.id !== id));
           setCurrentPage(1);
         });
       });
     } catch (err) {
       MySwal.fire({
         icon: "error",
-        title: "Failed to delete user."
+        title: "Failed to delete user.",
       });
     } finally {
       setLoading(false);
@@ -231,7 +233,7 @@ function App() {
     } catch (err) {
       MySwal.fire({
         icon: "error",
-        title: "Failed to fetch users."
+        title: "Failed to fetch users.",
       });
     } finally {
       setTimeout(() => {
@@ -245,20 +247,19 @@ function App() {
   }, []);
 
   return (
-    <div className="app">
+    <div className='app'>
       <Header />
-      <main className="content">
-        <div className="container">
+      <main className='content'>
+        <div className='container'>
           {loading ? (
             <Loader />
           ) : (
-            <div className="content-wrapper">
-              <div className="toolbar">
+            <div className='content-wrapper'>
+              <div className='toolbar'>
                 <Search search={search} resetSearch={search} />
                 <button
-                  className="primary-btn"
-                  onClick={() => setModal("Create User")}
-                >
+                  className='primary-btn'
+                  onClick={() => setModal("Create User")}>
                   Create New User
                 </button>
               </div>
